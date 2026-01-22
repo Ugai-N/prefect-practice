@@ -3,6 +3,8 @@ import random
 import time
 from typing import List
 
+from prefect.schedules import Cron
+
 
 @task(retries=3, retry_delay_seconds=5)
 def get_customer_ids() -> List[str]:
@@ -46,5 +48,21 @@ def main_enhanced() -> List[str]:
     return results
 
 
+# if __name__ == "__main__":
+#     main_enhanced()
+
+
+# if __name__ == "__main__":
+#     main_enhanced.serve(
+#         name="my-first-deployment",
+#         cron="30 10 * * *",  # Run every day at 10:30 AM
+#     )
+
 if __name__ == "__main__":
-    main_enhanced()
+    main_enhanced.serve(
+        name="my-first-deployment",
+        schedule=Cron(
+            "51 10 * * *",
+            timezone="Europe/Athens"
+        ))
+
